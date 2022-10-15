@@ -2,6 +2,8 @@
 
 
 #include "BushActor.h"
+#include "ParentPlayer.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ABushActor::ABushActor()
@@ -12,10 +14,8 @@ ABushActor::ABushActor()
 	// Mesh
 	BushMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = BushMesh;
-	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh_Mesh(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh_Mesh(TEXT("StaticMesh'/Game/__Woong/Meshes/SM_GrassFull.SM_GrassFull'"));
 	BushMesh->SetStaticMesh(Mesh_Mesh.Object);
-	ConstructorHelpers::FObjectFinder<UMaterial> MeshMaterial(TEXT("Material'/Game/StarterContent/Props/Materials/M_Bush.M_Bush'"));
-	BushMesh->SetMaterial(0, MeshMaterial.Object);
 	BushMesh->SetCollisionProfileName("OverlapAllDynamic");
 
 	// Overlap Player Visible On/Off
@@ -40,9 +40,27 @@ void ABushActor::Tick(float DeltaTime)
 void ABushActor::MeshVisible(AActor* OverlappedActor, AActor* OtherActor)
 {
 	// ParentPlayer에 형변환해서 맞으면 매쉬 unvisible
+	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
+
+	if (OverlapPlayer != nullptr)
+	{
+		OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
+		OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, OverlapPlayer->GetFName().ToString());
 }
 
 void ABushActor::MeshUnVisible(AActor* OverlappedActor, AActor* OtherActor)
 {
+	// ParentPlayer에 형변환해서 맞으면 매쉬 visible
+	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
 
+	if (OverlapPlayer != nullptr)
+	{
+		OverlapPlayer->GetMesh()->SetRenderCustomDepth(false);
+		OverlapPlayer->GetMesh()->SetOnlyOwnerSee(false);
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, OverlapPlayer->GetFName().ToString());
 }

@@ -31,4 +31,5 @@ public:
 
 	UFUNCTION()
 	virtual void MeshUnVisible(AActor* OverlappedActor, AActor* OtherActor);
+
 };
