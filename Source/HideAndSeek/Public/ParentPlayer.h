@@ -19,6 +19,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// 움직임
+	FVector CurrentVelocity;
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -26,11 +31,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-protected:
-	// 움직임
-	FVector CurrentVelocity;
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	// OwnerSee True?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MyCategory")
+		bool IsHide = false;
 
 private:
 	UPROPERTY(VisibleAnywhere)

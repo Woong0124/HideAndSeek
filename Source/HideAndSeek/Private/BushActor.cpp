@@ -46,9 +46,12 @@ void ABushActor::MeshVisible(AActor* OverlappedActor, AActor* OtherActor)
 	{
 		OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
 		OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
+		OverlapPlayer->IsHide = true;
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, OverlapPlayer->GetFName().ToString());
+
+	UE_LOG(LogTemp, Log, TEXT("%s"), OverlapPlayer->IsHide ? TEXT("true" : TEXT("false")));
 }
 
 void ABushActor::MeshUnVisible(AActor* OverlappedActor, AActor* OtherActor)
@@ -60,7 +63,10 @@ void ABushActor::MeshUnVisible(AActor* OverlappedActor, AActor* OtherActor)
 	{
 		OverlapPlayer->GetMesh()->SetRenderCustomDepth(false);
 		OverlapPlayer->GetMesh()->SetOnlyOwnerSee(false);
+		OverlapPlayer->IsHide = false;
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, OverlapPlayer->GetFName().ToString());
+
+	UE_LOG(LogTemp, Log, TEXT("%s"), OverlapPlayer->IsHide ? TEXT("true" : TEXT("false")));
 }
