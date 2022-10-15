@@ -14,4 +14,8 @@ class HIDEANDSEEK_API AHideAndSeekGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AHideAndSeekGameModeBase();
+
+	virtual void BeginPlay() override;
 };

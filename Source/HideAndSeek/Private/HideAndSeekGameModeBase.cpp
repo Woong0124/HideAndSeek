@@ -2,4 +2,14 @@
 
 
 #include "HideAndSeekGameModeBase.h"
+#include "ParentPlayer.h"
 
+AHideAndSeekGameModeBase::AHideAndSeekGameModeBase()
+{
+	DefaultPawnClass = AParentPlayer::StaticClass();
+}
+
+void AHideAndSeekGameModeBase::BeginPlay()
+{
+
+}
