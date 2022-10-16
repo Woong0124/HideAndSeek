@@ -19,8 +19,11 @@ ABushActor::ABushActor()
 	BushMesh->SetCollisionProfileName("OverlapAllDynamic");
 
 	// Overlap Player Visible On/Off
-	OnActorBeginOverlap.AddDynamic(this, &ABushActor::MeshVisible);
-	OnActorEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
+	//OnActorBeginOverlap.AddDynamic(this, &ABushActor::MeshVisible);
+	//OnActorEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
+
+	BushMesh->OnComponentBeginOverlap.AddDynamic(this, &ABushActor::MeshVisible);
+	BushMesh->OnComponentEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
 }
 
 // Called when the game starts or when spawned
@@ -37,36 +40,32 @@ void ABushActor::Tick(float DeltaTime)
 
 }
 
-void ABushActor::MeshVisible(AActor* OverlappedActor, AActor* OtherActor)
+void ABushActor::MeshVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// ParentPlayer에 형변환해서 맞으면 매쉬 unvisible
 	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
 
 	if (OverlapPlayer != nullptr)
 	{
-		OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
-		OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
-		OverlapPlayer->IsHide = true;
+		if (BushMesh->IsOverlappingComponent(OverlapPlayer->GetCapsuleComponent()) == true)
+		{
+			OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
+			OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
+			OverlapPlayer->IsHide = true;
+		}
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, OverlapPlayer->GetFName().ToString());
-
-	UE_LOG(LogTemp, Log, TEXT("%s"), OverlapPlayer->IsHide ? TEXT("true" : TEXT("false")));
 }
 
-void ABushActor::MeshUnVisible(AActor* OverlappedActor, AActor* OtherActor)
+void ABushActor::MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndext)
 {
-	// ParentPlayer에 형변환해서 맞으면 매쉬 visible
 	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
 
 	if (OverlapPlayer != nullptr)
 	{
-		OverlapPlayer->GetMesh()->SetRenderCustomDepth(false);
-		OverlapPlayer->GetMesh()->SetOnlyOwnerSee(false);
-		OverlapPlayer->IsHide = false;
+		if (BushMesh->IsOverlappingComponent(OverlapPlayer->GetCapsuleComponent()) == false)
+		{
+			OverlapPlayer->GetMesh()->SetRenderCustomDepth(false);
+			OverlapPlayer->GetMesh()->SetOnlyOwnerSee(false);
+			OverlapPlayer->IsHide = false;
+		}
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, OverlapPlayer->GetFName().ToString());
-
-	UE_LOG(LogTemp, Log, TEXT("%s"), OverlapPlayer->IsHide ? TEXT("true" : TEXT("false")));
 }
