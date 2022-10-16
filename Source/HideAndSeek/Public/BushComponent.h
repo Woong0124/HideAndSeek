@@ -3,26 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "Components/SphereComponent.h"
 #include "BushComponent.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class HIDEANDSEEK_API UBushComponent : public UActorComponent
+/**
+ * 
+ */
+UCLASS()
+class HIDEANDSEEK_API UBushComponent : public USphereComponent
 {
 	GENERATED_BODY()
-
-public:	
-	// Sets default values for this component's properties
+	
+public:
 	UBushComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
 };
