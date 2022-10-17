@@ -10,17 +10,13 @@ ABushActor::ABushActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 	// Mesh
 	BushMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = BushMesh;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh_Mesh(TEXT("StaticMesh'/Game/__Woong/Meshes/SM_GrassFull.SM_GrassFull'"));
 	BushMesh->SetStaticMesh(Mesh_Mesh.Object);
 	BushMesh->SetCollisionProfileName("OverlapAllDynamic");
-
-	// Overlap Player Visible On/Off
-	//OnActorBeginOverlap.AddDynamic(this, &ABushActor::MeshVisible);
-	//OnActorEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
 
 	BushMesh->OnComponentBeginOverlap.AddDynamic(this, &ABushActor::MeshVisible);
 	BushMesh->OnComponentEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
@@ -37,9 +33,10 @@ void ABushActor::BeginPlay()
 void ABushActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
+// Bush In
 void ABushActor::MeshVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
@@ -50,11 +47,12 @@ void ABushActor::MeshVisible(UPrimitiveComponent* OverlappedComponent, AActor* O
 		{
 			OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
 			OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
-			OverlapPlayer->IsHide = true;
+			OverlapPlayer->InBush = true;
 		}
 	}
 }
 
+// Bush Out
 void ABushActor::MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndext)
 {
 	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
@@ -65,7 +63,8 @@ void ABushActor::MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor*
 		{
 			OverlapPlayer->GetMesh()->SetRenderCustomDepth(false);
 			OverlapPlayer->GetMesh()->SetOnlyOwnerSee(false);
-			OverlapPlayer->IsHide = false;
+			OverlapPlayer->InBush = false;
+			
 		}
 	}
 }

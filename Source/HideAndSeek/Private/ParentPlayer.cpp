@@ -6,6 +6,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "BushComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AParentPlayer::AParentPlayer()
@@ -38,6 +40,16 @@ AParentPlayer::AParentPlayer()
 
 	// Character Movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	// Bush Component
+	Bush = CreateDefaultSubobject<UBushComponent>(TEXT("Bush"));
+	Bush->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+}
+
+void AParentPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
 }
 
 // Called when the game starts or when spawned

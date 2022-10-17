@@ -31,9 +31,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// OwnerSee True?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MyCategory")
-		bool IsHide = false;
+	UPROPERTY()
+		bool InBush = false;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -41,4 +43,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 		class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere)
+		class UBushComponent* Bush;
 };
