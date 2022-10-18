@@ -18,7 +18,6 @@ ABushActor::ABushActor()
 	BushMesh->SetStaticMesh(Mesh_Mesh.Object);
 	BushMesh->SetCollisionProfileName("OverlapAllDynamic");
 
-	BushMesh->OnComponentBeginOverlap.AddDynamic(this, &ABushActor::MeshVisible);
 	BushMesh->OnComponentEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
 }
 
@@ -33,21 +32,21 @@ void ABushActor::BeginPlay()
 void ABushActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-}
 
-// Bush In
-void ABushActor::MeshVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
-
-	if (OverlapPlayer != nullptr)
+	// 오버랩된 ParentPlayer가 있다면 해당 캐릭터를 BushIn상태로 만듬
+	GetOverlappingActors(OverlapParentPlayerArr, AParentPlayer::StaticClass());
+	for (auto OverlapActor : OverlapParentPlayerArr)
 	{
-		if (BushMesh->IsOverlappingComponent(OverlapPlayer->GetCapsuleComponent()) == true)
+		AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OverlapActor);
+
+		if (OverlapPlayer != nullptr)
 		{
-			OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
-			OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
-			OverlapPlayer->InBush = true;
+			if (BushMesh->IsOverlappingComponent(OverlapPlayer->GetCapsuleComponent()) == true)
+			{
+				OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
+				OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
+				OverlapPlayer->InBush = true;
+			}
 		}
 	}
 }

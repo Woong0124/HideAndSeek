@@ -26,8 +26,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* BushMesh;
 
-	UFUNCTION()
-		virtual void MeshVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UPROPERTY()
+		TArray<AActor*> OverlapParentPlayerArr;
 
 	UFUNCTION()
 		virtual void MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndext);

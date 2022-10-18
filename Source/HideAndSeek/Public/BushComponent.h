@@ -25,15 +25,6 @@ public:
 		class AParentPlayer* MyOwner;
 
 	UPROPERTY()
-		TArray<AActor*> PlayerArr;
-
-	UPROPERTY()
-		TArray<AActor*> BushArr;
-
-	UFUNCTION()
-		void BushInFunc(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void BushOutFunc(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		TArray<AActor*> OverlapParentPlayerArr;
 
 };
