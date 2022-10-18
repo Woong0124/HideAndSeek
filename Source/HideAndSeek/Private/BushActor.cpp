@@ -5,6 +5,9 @@
 #include "ParentPlayer.h"
 #include "Components/CapsuleComponent.h"
 
+#define BushStaticMesh "StaticMesh'/Game/__Woong/Meshes/SM_GrassFull.SM_GrassFull'"
+#define SetCollisionName "OverlapAllDynamic"
+
 // Sets default values
 ABushActor::ABushActor()
 {
@@ -14,9 +17,9 @@ ABushActor::ABushActor()
 	// Mesh
 	BushMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = BushMesh;
-	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh_Mesh(TEXT("StaticMesh'/Game/__Woong/Meshes/SM_GrassFull.SM_GrassFull'"));
-	BushMesh->SetStaticMesh(Mesh_Mesh.Object);
-	BushMesh->SetCollisionProfileName("OverlapAllDynamic");
+	ConstructorHelpers::FObjectFinder<UStaticMesh> BushMesh_Mesh(TEXT(BushStaticMesh));
+	BushMesh->SetStaticMesh(BushMesh_Mesh.Object);
+	BushMesh->SetCollisionProfileName(SetCollisionName);
 
 	BushMesh->OnComponentEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
 }

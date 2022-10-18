@@ -9,6 +9,9 @@
 #include "BushComponent.h"
 #include "Net/UnrealNetwork.h"
 
+#define MannequinSkeletalMesh "SkeletalMesh'/Game/Mannequin/Character/Mesh/SK_Mannequin_Female.SK_Mannequin_Female'"
+#define ManequinAnimBP "AnimBlueprint'/Game/Mannequin/Animations/ThirdPerson_AnimBP.ThirdPerson_AnimBP_C'"
+
 // Sets default values
 AParentPlayer::AParentPlayer()
 {
@@ -18,11 +21,11 @@ AParentPlayer::AParentPlayer()
 	bUseControllerRotationYaw = false;
 
 	// Mesh
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> Mannequin(TEXT("SkeletalMesh'/Game/Mannequin/Character/Mesh/SK_Mannequin_Female.SK_Mannequin_Female'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> Mannequin(TEXT(MannequinSkeletalMesh));
 	GetMesh()->SetSkeletalMesh(Mannequin.Object);
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -85.f));
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, -0.f));
-	ConstructorHelpers::FClassFinder<UAnimInstance> AnimBP(TEXT("AnimBlueprint'/Game/Mannequin/Animations/ThirdPerson_AnimBP.ThirdPerson_AnimBP_C'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> AnimBP(TEXT(ManequinAnimBP));
 	GetMesh()->SetAnimInstanceClass(AnimBP.Class);
 
 	// SpringArm
