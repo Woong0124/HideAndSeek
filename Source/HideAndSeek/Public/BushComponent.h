@@ -21,10 +21,18 @@ public:
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	// Get Owner
 	UPROPERTY()
 		class AParentPlayer* MyOwner;
 
+	// Overlapping ParentPlayer Array
 	UPROPERTY()
 		TArray<AActor*> OverlapParentPlayerArr;
 
+	// Running mesh settings on the client
+	UFUNCTION(Client, Reliable)
+		void SetBushOwnerSee();
+		void SetBushOwnerSee_Implementation();
 };

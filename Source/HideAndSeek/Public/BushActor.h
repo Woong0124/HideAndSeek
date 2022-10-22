@@ -23,13 +23,26 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* BushMesh;
 
+	// Overlapping ParentPlayer Array
 	UPROPERTY()
 		TArray<AActor*> OverlapParentPlayerArr;
 
+	// When the end overlap
 	UFUNCTION()
 		virtual void MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndext);
 
+	// Bush In Player 
+	UFUNCTION(NetMulticast, Reliable)
+		void BushInServer(AParentPlayer* Player);
+		void BushInServer_Implementation(AParentPlayer* Player);
+
+	// Bush Out Player
+	UFUNCTION(NetMulticast, Reliable)
+		void BushOutServer(AParentPlayer* Player);
+		void BushOutServer_Implementation(AParentPlayer* Player);
 };

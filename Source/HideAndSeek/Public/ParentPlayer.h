@@ -31,11 +31,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// OwnerSee True?
-	UPROPERTY()
+	// Check whether or not it is in the bush
+	UPROPERTY(Replicated)
 		bool InBush = false;
+
 
 private:
 	UPROPERTY(VisibleAnywhere)

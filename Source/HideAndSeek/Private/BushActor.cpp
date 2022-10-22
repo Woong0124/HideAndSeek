@@ -14,13 +14,14 @@ ABushActor::ABushActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	// Mesh
+	// Mesh Setting
 	BushMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = BushMesh;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> BushMesh_Mesh(TEXT(BushStaticMesh));
 	BushMesh->SetStaticMesh(BushMesh_Mesh.Object);
 	BushMesh->SetCollisionProfileName(SetCollisionName);
 
+	// EndOverlap Delegate
 	BushMesh->OnComponentEndOverlap.AddDynamic(this, &ABushActor::MeshUnVisible);
 }
 
@@ -47,14 +48,20 @@ void ABushActor::Tick(float DeltaTime)
 			if (BushMesh->IsOverlappingComponent(OverlapPlayer->GetCapsuleComponent()) == true)
 			{
 				OverlapPlayer->GetMesh()->SetRenderCustomDepth(true);
-				OverlapPlayer->GetMesh()->SetOnlyOwnerSee(true);
-				OverlapPlayer->InBush = true;
+				BushInServer(OverlapPlayer);
 			}
 		}
 	}
 }
 
-// Bush Out
+void ABushActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+
+}
+
+// ParentPlayer가 EndOverlap 되었을 때 캐릭터를 Bush Out 상태로 만듬
 void ABushActor::MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndext)
 {
 	AParentPlayer* OverlapPlayer = Cast<AParentPlayer>(OtherActor);
@@ -64,9 +71,22 @@ void ABushActor::MeshUnVisible(UPrimitiveComponent* OverlappedComponent, AActor*
 		if (BushMesh->IsOverlappingComponent(OverlapPlayer->GetCapsuleComponent()) == false)
 		{
 			OverlapPlayer->GetMesh()->SetRenderCustomDepth(false);
-			OverlapPlayer->GetMesh()->SetOnlyOwnerSee(false);
-			OverlapPlayer->InBush = false;
+			BushOutServer(OverlapPlayer);
 			
 		}
 	}
+}
+
+// 모든 클라이언트에서 매쉬를 끈다
+void ABushActor::BushInServer_Implementation(AParentPlayer* Player)
+{
+	Player->InBush = true;
+	Player->GetMesh()->SetOnlyOwnerSee(true);
+}
+
+// 모든 클라이언트에서 매쉬를 켠다
+void ABushActor::BushOutServer_Implementation(AParentPlayer* Player)
+{
+	Player->InBush = false;
+	Player->GetMesh()->SetOnlyOwnerSee(false);
 }

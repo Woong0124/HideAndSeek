@@ -20,6 +20,8 @@ AParentPlayer::AParentPlayer()
 
 	bUseControllerRotationYaw = false;
 
+	GetMesh()->SetIsReplicated(true);
+
 	// Mesh
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> Mannequin(TEXT(MannequinSkeletalMesh));
 	GetMesh()->SetSkeletalMesh(Mannequin.Object);
@@ -53,6 +55,7 @@ void AParentPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+
 }
 
 // Called when the game starts or when spawned
@@ -66,6 +69,7 @@ void AParentPlayer::BeginPlay()
 void AParentPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 
 }
 
