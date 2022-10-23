@@ -38,7 +38,7 @@ public:
 		bool InBush = false;
 
 
-private:
+protected:
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent* SpringArm;
 
